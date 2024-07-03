@@ -27,17 +27,9 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base, BaseModel
 from config.config import settings
 import sys
-sys.path.insert(0, '..')
-from config.config import settings
-from models.base_model import Base, BaseModel
-from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
-from pydantic import env_settings
-from dotenv import load_dotenv
-import psycopg2
-import os
-from os import getenv
+sys.path.insert(0, '..')
 
 load_dotenv()
 
@@ -126,6 +118,7 @@ class DBStorage:
 
         if is_postgresql_up(connection_str):
             self.engine = create_engine(connection_str, pool_pre_ping=True)
+            print(">>>>> engine here <<<<<<<<"self.engine)
         else:
             print("PostgreSQL is not running or the connection failed.")
 
