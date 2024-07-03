@@ -26,11 +26,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base, BaseModel
 from config.config import settings
-from google.cloud.sql.connector import Connector, IPTypes
 import sys
 sys.path.insert(0, '..')
-
-from google.cloud.sql.connector import Connector, IPTypes
 from config.config import settings
 from models.base_model import Base, BaseModel
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -43,8 +40,6 @@ import os
 from os import getenv
 
 load_dotenv()
-
-connector = Connector()
 
 
 def login():
@@ -78,16 +73,16 @@ if not os.getenv("dbUSER"):
     login()
 
 
-def getconn():
-    conn = connector.connect(
-        settings.dbHost_instance,
-        "pg8000",
-        user=settings.dbUSER,
-        password=settings.dbPWD,
-        db=settings.dbDB,
-        ip_type=IPTypes.PUBLIC
-    )
-    return conn
+# def getconn():
+#     conn = connector.connect(
+#         settings.dbHost_instance,
+#         "pg8000",
+#         user=settings.dbUSER,
+#         password=settings.dbPWD,
+#         db=settings.dbDB,
+#         ip_type=IPTypes.PUBLIC
+#     )
+#     return conn
 
 
 def is_postgresql_up(db_url):
