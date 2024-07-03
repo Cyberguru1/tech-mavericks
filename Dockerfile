@@ -2,7 +2,7 @@ FROM python:3.11.5-slim
 
 ENV tech_mavericks /app
 
-Env PORT=8000
+Env PORT=8080
 
 EXPOSE 587
 
