@@ -1,7 +1,7 @@
 # fastapi
 fastapi==0.89.1
 uvicorn==0.17.6
-pydantic
+pydantic==1.10.4
 pydantic[email]
 
 #for template
@@ -11,9 +11,11 @@ jinja2
 aiofiles==23.1.0
 
 #for database
-sqlalchemy==1.4.46
+sqlalchemy==1.4.50
 setuptools
-psycopg2-binary
+psycopg2-binary==2.9.5
+psycopg2==2.9.9
+
 
 #for loading environment variables  
 python-dotenv
