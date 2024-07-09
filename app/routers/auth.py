@@ -157,8 +157,6 @@ async def isAuth(request: Request,
                   db: Session = Depends(load)):
     try:
 
-        Authorize.jwt_refresh_token_required()
-
         user_email = Authorize.get_jwt_subject()
 
         if not user_email:
@@ -172,17 +170,10 @@ async def isAuth(request: Request,
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail=[{"status": "error", 'msg':'The user belonging to this token no logger exist'}])
     except Exception as e:
-        error = e.__class__.__name__
-        if error == 'MissingTokenError':
-            redirect_url = front_endUrl + "signin"
-            
-            return JSONResponse(content={
-                "redirect_url": redirect_url,
-                "redirect": True
-                }, status_code=307)
-        
+    
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+            status_code=status.HTTP_400_BAD_REQUEST, detail=[{"status": "error", 'msg':'token no logger exist'}]
+            )
     
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.id == check.id).first()
@@ -305,17 +296,9 @@ async def refresh(request: Request,
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail=[{'msg':'The user belonging to this token no logger exist'}])
     except Exception as e:
-        error = e.__class__.__name__
-        if error == 'MissingTokenError':
-            redirect_url = request.url_for('login')
-            
-            return JSONResponse(content={
-                "redirect_url": redirect_url,
-                "redirect": True
-                }, status_code=307)
         
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+            status_code=status.HTTP_400_BAD_REQUEST, detail=[{"status": "error", 'msg':'token no logger exist'}])
 
     data = {
         'username': check.name,
