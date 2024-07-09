@@ -26,7 +26,6 @@ class Settings(BaseSettings):
     dbPWD  : str
     dbDB   : str
     dbHost_instance : str
-    DATABASE_URL : str
 
     # jwt settings
     jwt_secret_key: str

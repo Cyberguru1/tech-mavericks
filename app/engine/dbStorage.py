@@ -118,6 +118,7 @@ class DBStorage:
 
         if is_postgresql_up(connection_str):
             self.engine = create_engine(connection_str, pool_pre_ping=True)
+
         else:
             print("PostgreSQL is not running or the connection failed.")
 
