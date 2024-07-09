@@ -16,7 +16,13 @@ app = FastAPI()
 #  add session middleware for google login
 app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 
-origins = ["http://localhost:8080", "https://tech-maverics.onrender.com", "https://tech-marverick.netlify.app"]
+origins = [
+    "http://localhost:8080",
+    "https://tech-maverics.onrender.com", 
+    "https://tech-marverick.netlify.app",
+    "http://localhost:3000"
+    ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
