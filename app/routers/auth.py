@@ -148,6 +148,59 @@ def reset_password(request: userSchema.resetPassword, token: str, db: Session = 
         "message": "Password reset successfully"
     }
 
+@router.post('/isAuthenticated/')
+async def isAuth(request: Request,
+                  response: Response,
+                  Authorize: AuthJWT = Depends(),
+                  db: Session = Depends(load)):
+    try:
+
+        Authorize.jwt_refresh_token_required()
+
+        user_email = Authorize.get_jwt_subject()
+
+        if not user_email:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=[{"status": "error",'msg':'Could not refresh access token'}])
+
+        check = db.query_eng(userModel.Users).filter(
+            userModel.Users.email == user_email).first()
+
+        if not check:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=[{"status": "error", 'msg':'The user belonging to this token no logger exist'}])
+    except Exception as e:
+        error = e.__class__.__name__
+        if error == 'MissingTokenError':
+            redirect_url = request.url_for('login')
+            
+            return JSONResponse(content={
+                "redirect_url": redirect_url,
+                "redirect": True
+                }, status_code=307)
+        
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.id == check.id).first()
+    
+    data = {
+                "role": check.role,
+                "email": check.email,
+            }
+    
+    if patient:
+        data['nin'] = patient.nin
+    else:
+        data['nin'] = ""
+
+    return {
+            "status": "success",
+            "msg": "true",
+            "data": data
+        }
+
 # login endpoint
 @router.post('/login', status_code=status.HTTP_200_OK)
 async def login(response: Response, request: userSchema.UserLogin = Depends(),
@@ -220,11 +273,11 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     
     return {
         "status": "success",
-        "message": "user logged in successfully",
-        "tokens": {
-            "access_token": access_token,
-            "refresh_token": refresh_token
-            }
+        "message": "user logged in successfully"
+        # "tokens": {
+        #     "access_token": access_token,
+        #     "refresh_token": refresh_token
+        #     }
         }
 
 @router.get('/refresh')
@@ -277,10 +330,10 @@ async def refresh(request: Request,
 
     return {
             "status": "success",
-            "message": "refreshed successfully!!",
-            "tokens": {
-                "access_token": access_token,
-                }
+            "message": "refreshed successfully!!"
+            # "tokens": {
+            #     "access_token": access_token,
+            #     }
             }
 
 # login with google endpoint
@@ -357,11 +410,11 @@ async def auth_google_login(request: Request,
 
     return {
         "status": "success",
-        "message": "user logged in successfully",
-        "tokens": {
-            "access_token": access_token,
-            "refresh_token": refresh_token
-        }
+        "message": "user logged in successfully"
+        # "tokens": {
+        #     "access_token": access_token,
+        #     "refresh_token": refresh_token
+        # }
         }
 
 @router.get('/logout', status_code=status.HTTP_200_OK)
