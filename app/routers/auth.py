@@ -35,6 +35,8 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
+
+front_endUrl = "https://tech-marverick.netlify.app/"
 @router.get('/verifyemail/{token}')
 def verify_token(token: str, db: Session = Depends(load)):
     """_summary_
@@ -172,7 +174,7 @@ async def isAuth(request: Request,
     except Exception as e:
         error = e.__class__.__name__
         if error == 'MissingTokenError':
-            redirect_url = request.url_for('login')
+            redirect_url = front_endUrl + "signin"
             
             return JSONResponse(content={
                 "redirect_url": redirect_url,
@@ -421,4 +423,4 @@ async def auth_google_login(request: Request,
 def logout(response: Response, Authorize: AuthJWT = Depends()):
     Authorize.unset_jwt_cookies()
     response.set_cookie("logged_in", '', -1)
-    return RedirectResponse(url = '/auth/login')  #  remember to use frontend url for login in here (error otherwise)
+    return RedirectResponse(url = front_endUrl + '/signin')  #  remember to use frontend url for login in here (error otherwise)
