@@ -2,3 +2,5 @@
 2024 Jul 4  01:41:21.18 | user.py took 0:00:44.834939 to execute | INFO | user with the name testuser has been created
 2024 Jul 4  01:47:28.24 | user.py took 0:00:35.989521 to execute | INFO | user with the name testuser has been created
 2024 Jul 4  03:42:07.96 | user.py took 0:03:55.591662 to execute | INFO | user with the name testuser has been created
+2024 Jul 9  11:16:25.23 | user.py took 0:01:22.816820 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2024 Jul 9  11:16:29.67 | user.py took 0:01:27.249703 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users

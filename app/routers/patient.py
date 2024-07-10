@@ -53,6 +53,13 @@ async def create_patient(request: patientSchema.Patient, http_request: Request, 
 
     message = await verifyEmail(email, http_request, request)
 
+    if message != "Verification email sent successfully":
+            return {
+                   "name": request.name,
+                    "email": email,
+                    "message": message
+                    }
+
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
     new_patient = patientModel.Patient(name=request.name,
@@ -67,6 +74,14 @@ async def create_patient(request: patientSchema.Patient, http_request: Request, 
                                        role="patient",
                                        is_verified=False)
     db.new(new_patient)
+
+    queryUser = db.query_eng(userModel.Users).filter(
+        userModel.Users.email == email).first()
+
+    new_record = recordModel.Record(type="", patient=queryUser.id, DOB=request.dob,
+                                    BloodType="", Height=0.0, weight=0.0,
+                                    BMI=0.0)
+    db.new(new_record)
     db.save()
 
     return {

@@ -150,27 +150,23 @@ def reset_password(request: userSchema.resetPassword, token: str, db: Session = 
         "message": "Password reset successfully"
     }
 
-@router.post('/isAuthenticated/')
-async def isAuth(request: Request,
-                  response: Response,
-                  Authorize: AuthJWT = Depends(),
+@router.get('/isAuthenticated')
+async def authCheck(Authorize: AuthJWT = Depends(),
                   db: Session = Depends(load)):
     try:
 
+        Authorize.jwt_refresh_token_required()
         user_email = Authorize.get_jwt_subject()
-
         if not user_email:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail=[{"status": "error",'msg':'Could not refresh access token'}])
-
+                                detail=[{"status": "error",'msg':'unauthorized access'}])
         check = db.query_eng(userModel.Users).filter(
             userModel.Users.email == user_email).first()
-
         if not check:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail=[{"status": "error", 'msg':'The user belonging to this token no logger exist'}])
     except Exception as e:
-    
+        print(e)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=[{"status": "error", 'msg':'token no logger exist'}]
             )
@@ -266,7 +262,8 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     
     return {
         "status": "success",
-        "message": "user logged in successfully"
+        "message": "user logged in successfully",
+        "data": data
         # "tokens": {
         #     "access_token": access_token,
         #     "refresh_token": refresh_token
@@ -282,7 +279,6 @@ async def refresh(request: Request,
     try:
 
         Authorize.jwt_refresh_token_required()
-
         user_email = Authorize.get_jwt_subject()
 
         if not user_email:
