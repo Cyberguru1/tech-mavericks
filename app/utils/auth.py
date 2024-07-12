@@ -57,7 +57,6 @@ def set_access_cookies(token: str,response: Response):
         max_age=ACCESS_TOKEN_EXPIRES_IN * 60,
         expires=ACCESS_TOKEN_EXPIRES_IN * 60,
         path='/',
-        domain=None,
         secure=True,
         httponly=True,
         samesite='None'
@@ -71,7 +70,6 @@ def set_refresh_cookies(token: str,response: Response):
         max_age=REFRESH_TOKEN_EXPIRES_IN * 60,
         expires=REFRESH_TOKEN_EXPIRES_IN * 60,
         path='/',
-        domain=None,
         secure=True,
         httponly=True,
         samesite='None'
