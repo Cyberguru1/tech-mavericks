@@ -166,7 +166,6 @@ async def authCheck(Authorize: AuthJWT = Depends(),
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail=[{"status": "error", 'msg':'The user belonging to this token no logger exist'}])
     except Exception as e:
-        print(e)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=[{"status": "error", 'msg':'token no logger exist'}]
             )

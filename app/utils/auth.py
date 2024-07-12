@@ -58,9 +58,9 @@ def set_access_cookies(token: str,response: Response):
         expires=ACCESS_TOKEN_EXPIRES_IN * 60,
         path='/',
         domain=None,
-        secure=False,
+        secure=True,
         httponly=True,
-        samesite='lax'
+        samesite='None'
     )
 
 
@@ -72,9 +72,9 @@ def set_refresh_cookies(token: str,response: Response):
         expires=REFRESH_TOKEN_EXPIRES_IN * 60,
         path='/',
         domain=None,
-        secure=False,
+        secure=True,
         httponly=True,
-        samesite='lax'
+        samesite='None'
     )
 
 
