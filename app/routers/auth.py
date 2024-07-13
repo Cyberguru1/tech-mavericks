@@ -176,6 +176,7 @@ async def authCheck(Authorize: AuthJWT = Depends(),
     data = {
                 "role": check.role,
                 "email": check.email,
+                "username": check.name
             }
     
     if patient:
